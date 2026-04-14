@@ -1,6 +1,67 @@
-@TaskFlowAPI.API_HostAddress = http://localhost:5287
+@TaskFlowAPI_HostAddress = http://localhost:8080
+@accessToken = REPLACE_WITH_ACCESS_TOKEN
+@refreshToken = REPLACE_WITH_REFRESH_TOKEN
+@taskId = REPLACE_WITH_TASK_ID
 
-GET {{TaskFlowAPI.API_HostAddress}}/weatherforecast/
+### Register
+POST {{TaskFlowAPI_HostAddress}}/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "simpleUser",
+  "email": "simpleUser@example.com",
+  "password": "Password@123"
+}
+
+### Login (copy AccessToken + RefreshToken from response)
+POST {{TaskFlowAPI_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "simpleUser",
+  "password": "Password@123"
+}
+
+### Refresh Token
+POST {{TaskFlowAPI_HostAddress}}/api/auth/refresh
+Content-Type: application/json
+
+{
+  "accessToken": "{{accessToken}}",
+  "refreshToken": "{{refreshToken}}"
+}
+
+### Get My Tasks
+GET {{TaskFlowAPI_HostAddress}}/api/tasks
+Authorization: Bearer {{accessToken}}
 Accept: application/json
 
-###
+### Create Task
+POST {{TaskFlowAPI_HostAddress}}/api/tasks
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "title": "Finish API testing",
+  "description": "Test all TaskFlow endpoints from .http file"
+}
+
+### Get Task By Id
+GET {{TaskFlowAPI_HostAddress}}/api/tasks/{{taskId}}
+Authorization: Bearer {{accessToken}}
+Accept: application/json
+
+### Update Task
+PUT {{TaskFlowAPI_HostAddress}}/api/tasks/{{taskId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "title": "Finish API testing (updated)",
+  "description": "Updated from .http request",
+  "status": "InProgress"
+}
+
+### Delete Task
+DELETE {{TaskFlowAPI_HostAddress}}/api/tasks/{{taskId}}
+Authorization: Bearer {{accessToken}}
